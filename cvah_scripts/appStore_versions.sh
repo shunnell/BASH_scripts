@@ -1,12 +1,13 @@
 #!/bin/bash
 
-APP_DIR=/cm/AppStore/appStore_3.2.1
-PREV_APP_DIR=/cm/AppStore/appStore_3.2
-TEAM=(cpt mdt)
+APP_STORE=/data/CM/configManagement/AppStore
+APP_DIR=${APP_STORE}/appStore_3.2.1      # Enter current version here
+PREV_APP_DIR=${APP_STORE}/appStore_3.2   # Enter previous version here
+declare -a TEAMS=("cpt" "mdt")
 
 for TEAM in "${TEAMS[@]}"; do
-   echo "Application, Version" > ${APP_DIR}/${TEAM}AppStoreListing.txt
-   echo "Application, Version, Old Version" > ${APP_DIR}/${TEAM}AppStoreListingChangeLog.txt
+   echo "Application, Version" > ${APP_STORE}/Administration/${TEAM}AppStoreListing.txt
+   echo "Application, Version, Old Version" > ${APP_STORE}/Administration/${TEAM}AppStoreListingChangeLog.txt
 
    cd ${APP_DIR}/${TEAM}
    for LIST in `ls`; do
@@ -26,11 +27,11 @@ for TEAM in "${TEAMS[@]}"; do
          fi
          VERSION=`head -1 version.txt`
          cd ..
-         echo "${LIST}, ${VERSION}" >> ../${i}AppStoreListing.txt
-         sed -i "s/\r//g" ${PREV_APP_DIR}/${i}/${LIST}/version.txt
-         OLD_VERSION=`head -1 ${PREV_APP_DIR}/${i}/${LIST}/version.txt`
+         echo "${LIST}, ${VERSION}" >> ${APP_STORE}/Administration/${TEAM}AppStoreListing.txt
+         sed -i "s/\r//g" ${PREV_APP_DIR}/${TEAM}/${LIST}/version.txt
+         OLD_VERSION=`head -1 ${PREV_APP_DIR}/${TEAM}/${LIST}/version.txt`
          if [ "${VERSION}" != "${OLD_VERSION}" ]; then
-            echo "${LIST}, ${VERSION}, ${OLD_VERSION}" >> ../${i}AppStoreListingChangeLog.txt
+            echo "${LIST}, ${VERSION}, ${OLD_VERSION}" >> ${APP_STORE}/Administration/${TEAM}AppStoreListingChangeLog.txt
          fi
       fi
    done
