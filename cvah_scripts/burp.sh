@@ -2,13 +2,13 @@
 
 #
 # Step 1: Update BurpSuite on a CPT MIP
-# Step 2: Make sure the destination path below is where you want the tar file to go
+# Step 2: Make sure the destination path (APP_DIR) below is where you want the tar file to go
 # Step 3: Modify the variables (version #, etc.) below
 # Step 4: Run this script
 
 CPT_VER=3.2.1
 BURP_VER=2.0.20  # EXAMPLE: 1.2.3
-APP_DIR=/appStore/appStore_${CPT_VER}/cpt/   #EXAMPLE /data/CM/configManagement/appStore/appStore/
+APP_DIR=/data/CM/configManagement/AppStore/appStore_${CPT_VER}/cpt
 
 PREV_LOCATION=`pwd`
 cd /
