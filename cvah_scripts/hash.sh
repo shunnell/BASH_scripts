@@ -3,6 +3,16 @@
 COMPARE_HASHES=Y        # If you want to compare hash results at the end
 SAVE=~/Documents
 HASH_DIR=`date +"%F--%H.%M.%S"`
+NUM_DIR=`echo $0 |sed 's/[^\/]//g' |awk '{ print length }'`
+if [ ${NUM_DIR} == 1 ]; then
+   CUR_PATH=`pwd`
+else
+   CUR_PATH=`echo $0 |cut -d/ -f-${NUM_DIR}`
+fi
+
+printf "\nExecuting...\n\n"
+
+#sleep 15 # Just in case script is executed before system reads all external drives
 
 if [[ ! -e ${SAVE} ]] ; then
    echo Directory Not Found...creating
@@ -23,8 +33,11 @@ for HASH_TARGET in `df -k |grep Data |cut -c6-8`; do
    DISK_SER=`echo ${NEW[*]}`
    HASH_PATH=`df -k |grep ${HASH_TARGET}2 |cut -d'%' -f2`
    cd ${HASH_PATH}
-   FILE=${SAVE}/${HASH_DIR}/`ls |grep CVAH |sed -e 's/-/_/g' |cut -d'_' -f2,4`_`echo ${DISK_SER} |sed -e 's/ //g'`.csv
-   /cm/scripts/hashBack.sh ${HASH_PATH} ${FILE} &
+   FILE=${SAVE}/${HASH_DIR}/`ls |grep CVAH |sed -e 's/-/_/g' \
+      |cut -d'_' -f2,4`_`echo ${DISK_SER} |sed -e 's/ //g'`.csv
+   FILE_ERROR=${SAVE}/${HASH_DIR}/`ls |grep CVAH |sed -e 's/-/_/g' \
+      |cut -d'_' -f2,4`_`echo ${DISK_SER} |sed -e 's/ //g'`.error
+   ${CUR_PATH}/hashBack.sh ${HASH_PATH} ${FILE} ${FILE_ERROR} &
 done
 
 if [[ "${COMPARE_HASHES}" == "Y" ]]; then
@@ -47,3 +60,5 @@ if [[ "${COMPARE_HASHES}" == "Y" ]]; then
       fi
    done
 fi
+
+
