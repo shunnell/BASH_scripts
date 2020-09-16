@@ -10,7 +10,7 @@ create-string () {
 }
 
 tunnel-forward () {
-    echo "    ssh -f -N ${TUN_USER}@${L_IP} -R ${LPORT}:${R_IP}:${RPORT}"
+    ssh -f -N ${TUN_USER}@${L_IP} -R ${LPORT}:${R_IP}:${RPORT}
 }
 
 IFS=$'\n' read -d '' -r -a lines < port-data
