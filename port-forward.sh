@@ -1,12 +1,22 @@
 #!/bin/bash
 
-tunnel () {
-    ssh -f -N ${LOCALUSER}@${LOCAL-IP} -R ${LOCAL-PORT}:${REMOTE_IP}:${REMOTE_PORT}
+TUN_USER=shunnel
+
+create-string () {
+    L_IP=`echo ${lines[$n]} |cut -d, -f1`
+    LPORT=`echo ${lines[$n]} |cut -d, -f2`
+    R_IP=`echo ${lines[$n]} |cut -d, -f3`
+    RPORT=`echo ${lines[$n]} |cut -d, -f4`
 }
 
-tunnel h -f -N ${LOCALUSER}@localhost -R 8080:192.168.2.152:8080 
-ssh -f -N shunnel@localhost -R 8090:192.168.2.152:8090
-ssh -f -N shunnel@localhost -R 8095:192.168.2.152:8095
-ssh -f -N shunnel@localhost -R 8081:192.168.2.155:8081
-ssh -f -N shunnel@localhost -R 7990:192.168.17.4:7990
-ssh -f -N shunnel@localhost -R 8085:192.168.17.2:8085
+tunnel-forward () {
+    echo "    ssh -f -N ${TUN_USER}@${L_IP} -R ${LPORT}:${R_IP}:${RPORT}"
+}
+
+IFS=$'\n' read -d '' -r -a lines < port-data
+
+for (( n=0; n<${#lines[@]}; n++ ))
+do
+    create-string
+    tunnel-forward
+done
