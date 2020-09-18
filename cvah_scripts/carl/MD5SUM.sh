@@ -4,19 +4,19 @@
 ################################################################################
 #
 #	Version 1.1	ceb	20181018
-#	This  version of the MD5SUM script has the ability to not only be
+#	This version of the MD5SUM script has the ability to not only be
 #	able to start up to 25 hashes but it also can get the serial num‐
-#	ber  for an external USB drive such that the serial number can be
-#	part of the HASH filename output.  This allows for hte ability to
+#	ber for an external USB drive such that the serial number can be
+#	part of the HASH filename output.  This allows for the ability to
 #	properly march a HASH output file to an external USB drive.
 #
 ################################################################################
 #
 
 #
-#	Set  up  directory where HASH files are stored, the default REPLY
-#	from the user and what the current local  dirdectory  is  as  the
-#	"hash1.sh"  file must be in the same directory where this scriupt
+#	Setup the directory where HASH files are stored, the default REPLY
+#	from the user and what the current local  dirdectory is as the
+#	"hash1.sh" file must be in the same directory where this script
 #	is located.
 #
 
@@ -25,13 +25,13 @@ REPLY="1"
 LOCAL_DIRECTORY=$(pwd)/
 
 #
-#	We  have  the  base  disk  names.   These  are used to create the
-#	"/dev/sd?" disk device name  that  is  needed  to  determine  the
-#	mounted  path  of  the  particulat  DATA directory.  Usually, the
-#	first external USB drive will  get  the  path  "/run/media/asses‐
-#	sor/Data".  The next external USB drives will get "/run/media/as‐
+#	We have the base disk  names. These are used to create the
+#	"/dev/sd?" disk device name that is needed to determine the
+#	mounted path of the particulat DATA directory. Usually, the
+#	first external USB drive will get the path "/run/media/asses‐
+#	sor/Data". The next external USB drives will get "/run/media/as‐
 #	sessor/Data1" with Data1 becoming Data2, etc., for each  external
-#	USB drive pluged in.  NOTE: If the path is not "/run/media/asses‐
+#	USB drive pluged in. NOTE: If the path is not "/run/media/asses‐
 #	sor/Data*", then the drive will not be looked at.
 #
 
@@ -43,12 +43,11 @@ disk_names=(
 #
 #	This houses the external USB serial number.  The serial nuber for
 #	the external USB drives is usually listed as part  of  the  drive
-#	is.     A    simple    example    would    be    "usb‐WD_My_Pass‐
-#	port_25E2_575833314434384139535952‐0:0".   In  this   case,   the
-#	"575833314434384139535952" piece is the actual serial number, but
-#	each character is represented as it ASCII value  in  hexadecimal.
-#	In  this  case,  when  converted back to actual ASCII charactersm
-#	this would be "WX31D48A9SYR".
+#	is. Example: "usb‐WD_My_Passport_25E2_575833314434384139535952‐0:0"
+#       In this case, the "575833314434384139535952" piece is the actual 
+#       serial number, but each character is represented as its ASCII value
+#       in hexadecimal. So when converted back to actual ASCII characters
+#	is "WX31D48A9SYR".
 #
 
 disk_serial=(
@@ -56,11 +55,11 @@ disk_serial=(
 )
 
 #575833314434384139535952
-#	This  is the MOUNTED PATH name for the DATA partitions of the ex‐
-#	ternal USB drives.  That is, using the  derived  names  from  the
-#	"disk_names"  table the mounted DATA partitions can be found.  If
+#	This is the MOUNTED PATH name for the DATA partitions of the ex‐
+#	ternal USB drives. That is, using the derived names from the
+#	"disk_names" table the mounted DATA partitions can be found. If
 #	the mounted path for the external USB drive is "/run/media/asses‐
-#	sor/Data*",  then  that  path  is recorded into this table at the
+#	sor/Data*", then that path is recorded into this table at the
 #	same index as the device name in the "disk_names" table above.’
 #
 
@@ -90,9 +89,9 @@ disk_PID=(
 )
 
 #
-#	This  routine  takes  a external USB drive serial number, such as
-#	"575833314434384139535952", and converts  it  to  "WX31D48A9SYR".
-#	However,  if  the base disk name from the "disk_names" table does
+#	This routine takes an external USB drive serial number, such as
+#	"575833314434384139535952", and converts it to "WX31D48A9SYR".
+#	However, if the base disk name from the "disk_names" table does
 #	not appear as symbolic link for the requested external USB drive,
 #	then the serial number will be presented as "UNKNOWN".
 #
@@ -101,7 +100,7 @@ get_serial(){
   Raw_Serial=$(ls -al /dev/disk/by-id/usb* | grep -w ${disk_names[${Count}]} | cut -d'/' -f5 | sed -e "s/-/_/g" | cut -d'_' -f6)
   if [[ ${Raw_Serial} == "" ]]; then
     echo "No such USB device - ${disk_names[${Count}]}"
-    disk_serial[Count]=$(echo "UNKNONW")
+    disk_serial[Count]=$(echo "UNKNOWN")
   else
     for c in $(seq 1 2 23); do
       let d=${c}+1
@@ -114,10 +113,10 @@ get_serial(){
 }
 
 #
-#	This  routine  will  actually attempt  to  start the hash1 script
-#	against the requested external USB drive.  First, it  must  check
+#	This routine will actually attempt to start the hash1 script
+#	against the requested external USB drive.  First, it must check
 #	to see if the requested external USB drive actually exists in the
-#	"disk_partitions" list, then check to see if there is  already  a
+#	"disk_partitions" list, then check to see if there is already a
 #	hash running before it will start the actual hash.
 #
 
@@ -135,17 +134,17 @@ Start_Hash(){
 }
 
 #
-#	Now  the  actual  meat of this script.  First, check to see if we
-#	got an actual parameter from the user/cli.   If  so,  we  are  to
-#	start any and  all  hashes against all known external USB drives.
-#	This is done so that we can use this scrpt within a "at"  job  or
-#	just  want  to start all hash automatically.  Otherwise, a simple
-#	menu is shown to let the user see what external  USB  drives  are
-#	available,  what  the serial numbers are, what the mounted parti‐
+#	Now the actual meat of this script.  First, check to see if we
+#	got an actual parameter from the user/cli. If so, we are to
+#	start any and all hashes against all known external USB drives.
+#	This is done so that we can use this scrpt within a "at" job or
+#	just want to start all hash automatically. Otherwise, a simple
+#	menu is shown to let the user see what external USB drives are
+#	available, what the serial numbers are, what the mounted parti‐
 #	tions are for hte external USB drives and which ones are running.
-#	The  user  can the select the external USB drive to start hashing
-#	on.  This script does allow for additional external USB drives to
-#	be  commected  as  each  time throught the hash selection loop it
+#	The user can the select the external USB drive to start hashing
+#	on. This script does allow for additional external USB drives to
+#	be commected as each time throught the hash selection loop it
 #	will validate which external USB drives are currently available.
 #
 
