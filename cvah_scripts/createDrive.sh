@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BS=262144
+BS=262144 # blocksize
 SOURCE_DIR=/data/CM/MULTIBOOT/
 SOURCE_BOOT=${SOURCE_DIR}`ls -t ${SOURCE_DIR} |head -1`
 
@@ -18,9 +18,9 @@ sleep 5
 umount /dev/sd[bcde][12]
 sleep 5
 USB=`ls /sys/bus/pci/drivers/xhci_hcd/ |grep 0000`
-echo ${USB} > /sys/bus/pci/drivers/xhci_hcd/unbind
+echo ${USB} > /sys/bus/pci/drivers/xhci_hcd/unbind # disconnect the drive connected to USB port(s)
 sleep 10
-echo ${USB} > /sys/bus/pci/drivers/xhci_hcd/bind
+echo ${USB} > /sys/bus/pci/drivers/xhci_hcd/bind # reconnect the USB ports, which would discover drives
 sleep 5
 
 df -kh |grep dev|grep sd
