@@ -1,22 +1,16 @@
 #!/bin/bash
 
-TUN_USER=shunnel
-
-create-string () {
-    L_IP=`echo ${lines[$n]} |cut -d, -f1`
-    LPORT=`echo ${lines[$n]} |cut -d, -f2`
-    R_IP=`echo ${lines[$n]} |cut -d, -f3`
-    RPORT=`echo ${lines[$n]} |cut -d, -f4`
-}
+tunnel_user=shunnel
 
 tunnel-forward () {
-    ssh -f -N ${TUN_USER}@${L_IP} -R ${LPORT}:${R_IP}:${RPORT}
+   ssh -f -N ${tunnel_user}@${local_ip} -R ${local_port}:${remote_ip}:${remote_port}
 }
 
-IFS=$'\n' read -d '' -r -a lines < port-data
+file=~/development/scripts/port-data
+IFS=','
 
-for (( n=0; n<${#lines[@]}; n++ ))
+while read -r local_ip local_port remote_ip remote_port
 do
-    create-string
-    tunnel-forward
-done
+   tunnel-forward
+done < "$file"
+
