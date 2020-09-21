@@ -26,7 +26,7 @@ fi
 i=0
 IFS=''
 while read "data"; do
-   Sunday[$i]=`echo "$data"  |cut -b 1-2`
+   Sunday[$i]=`echo $data    |cut -b 1-2`
    Monday[$i]=`echo $data    |cut -b 4-5`
    Tueday[$i]=`echo $data    |cut -b 7-8`
    Wednesday[$i]=`echo $data |cut -b 10-11`
