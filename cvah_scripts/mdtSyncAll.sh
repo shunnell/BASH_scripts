@@ -17,6 +17,6 @@ if [ -r ${SOURCE_DIR}${RELEASE} ]; then
    done
 else
    printf "\nSource not mounted, or not found!"
-   exit 1
+   exit 6
 fi
 
