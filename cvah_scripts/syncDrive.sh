@@ -28,13 +28,13 @@ if [ "${NO_SOURCES}" == "2" ]; then
       echo "dd if=${SRC1} of=${DEST1} bs=${BS}"
    else
       printf "\nProblem with ${SRC1} drive!"
-      exit 1
+      exit 6
    fi
    if [ -r ${SRC2} ]; then
       echo "dd if=${SRC2} of=${DEST2} bs=${BS}"
    else
       printf "\nProblem with ${SRC2} drive!"
-      exit 1
+      exit 6
    fi
 else
    for i in "${DEST[@]}"; do
