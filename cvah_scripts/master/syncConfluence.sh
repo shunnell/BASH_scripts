@@ -10,5 +10,5 @@ if [ -r ${SOURCE_DIR} ]; then
    rsync -Lruvt --delete --force ${SOURCE_DIR}/mdt/ ${SYNC_DEST}/mdt/${VERSION}/CVAH-MDT_Version_${VERSION}_Release/1_Documentation/THISISCVAH
 else
    printf "\nSource not mounted, or not found!"
-   exit 1
+   exit 2
 fi
